@@ -1,0 +1,13 @@
+comparison:
+  tasks:
+    task-a:
+      product: alpha
+      prod-index: prod-a
+      shadow-index: shadow-a
+      host: a.example.com
+      host-field: host
+      time-field: "@timestamp"
+      trace-id-field: traceId
+      body-field: responseBody
+      window-minutes: 5
+      page-size: 100
