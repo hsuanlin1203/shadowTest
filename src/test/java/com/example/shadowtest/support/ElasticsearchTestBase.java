@@ -3,6 +3,8 @@ package com.example.shadowtest.support;
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.json.jackson.JacksonJsonpMapper;
 import co.elastic.clients.transport.rest_client.RestClientTransport;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.apache.http.HttpHost;
 import org.elasticsearch.client.RestClient;
 import org.junit.jupiter.api.AfterAll;
@@ -24,7 +26,8 @@ public abstract class ElasticsearchTestBase {
                 .withEnv("discovery.type", "single-node");
         container.start();
         restClient = RestClient.builder(HttpHost.create(container.getHttpHostAddress())).build();
-        client = new ElasticsearchClient(new RestClientTransport(restClient, new JacksonJsonpMapper()));
+        ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
+        client = new ElasticsearchClient(new RestClientTransport(restClient, new JacksonJsonpMapper(objectMapper)));
     }
 
     @AfterAll
