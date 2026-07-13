@@ -11,14 +11,12 @@ import org.elasticsearch.client.RestClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.util.StringUtils;
 
 @Configuration
 public class ElasticsearchClientConfig {
 
     @Bean
-    @Lazy
     public ElasticsearchClient elasticsearchClient(
             @Value("${elasticsearch.host}") String host,
             @Value("${elasticsearch.port}") int port,
