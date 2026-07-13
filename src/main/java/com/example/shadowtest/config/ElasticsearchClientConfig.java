@@ -3,6 +3,8 @@ package com.example.shadowtest.config;
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.json.jackson.JacksonJsonpMapper;
 import co.elastic.clients.transport.rest_client.RestClientTransport;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -31,7 +33,8 @@ public class ElasticsearchClientConfig {
             builder.setHttpClientConfigCallback(cb -> cb.setDefaultCredentialsProvider(creds));
         }
         RestClient restClient = builder.build();
-        RestClientTransport transport = new RestClientTransport(restClient, new JacksonJsonpMapper());
+        ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
+        RestClientTransport transport = new RestClientTransport(restClient, new JacksonJsonpMapper(objectMapper));
         return new ElasticsearchClient(transport);
     }
 }
