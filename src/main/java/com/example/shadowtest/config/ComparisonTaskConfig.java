@@ -11,6 +11,8 @@ public class ComparisonTaskConfig {
     private String bodyField = "responseBody";
     private int windowMinutes = 10;
     private int pageSize = 500;
+    private String startTime; // ISO-8601, e.g. 2026-07-13T00:00:00Z
+    private String endTime;
 
     public String getProduct() { return product; }
     public void setProduct(String product) { this.product = product; }
@@ -32,4 +34,8 @@ public class ComparisonTaskConfig {
     public void setWindowMinutes(int windowMinutes) { this.windowMinutes = windowMinutes; }
     public int getPageSize() { return pageSize; }
     public void setPageSize(int pageSize) { this.pageSize = pageSize; }
+    public String getStartTime() { return startTime; }
+    public void setStartTime(String startTime) { this.startTime = startTime; }
+    public String getEndTime() { return endTime; }
+    public void setEndTime(String endTime) { this.endTime = endTime; }
 }

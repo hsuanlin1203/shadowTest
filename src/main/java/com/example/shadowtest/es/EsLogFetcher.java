@@ -11,6 +11,7 @@ import co.elastic.clients.elasticsearch.core.search.Hit;
 import com.example.shadowtest.config.ComparisonTaskConfig;
 import com.example.shadowtest.engine.TimeWindow;
 import com.example.shadowtest.model.LogRecord;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 /** Fetches all records for a host within a time window using PIT + search_after. */
+@Component
 public class EsLogFetcher {
 
     private final ElasticsearchClient client;
