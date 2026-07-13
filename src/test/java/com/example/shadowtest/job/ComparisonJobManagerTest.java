@@ -62,4 +62,34 @@ class ComparisonJobManagerTest {
             release.countDown();
         }
     }
+
+    @Test
+    void getJobReturnsEmptyForUnknownJobId() {
+        ComparisonEngine engine = Mockito.mock(ComparisonEngine.class);
+        ComparisonJobManager manager = new ComparisonJobManager(propsWithTaskA(), engine);
+        assertThat(manager.getJob("never-registered")).isEmpty();
+    }
+
+    @Test
+    void engineFailureMarksJobFailedWithErrorMessage() throws Exception {
+        ComparisonEngine engine = Mockito.mock(ComparisonEngine.class);
+        Mockito.doThrow(new RuntimeException("boom"))
+            .when(engine).run(Mockito.anyString(), Mockito.eq("task-a"), Mockito.any(), Mockito.any());
+
+        ComparisonJobManager manager = new ComparisonJobManager(propsWithTaskA(), engine);
+        String jobId = manager.trigger("task-a");
+
+        // poll briefly for the async submission to finish and mark FAILED
+        long deadline = System.currentTimeMillis() + 2000;
+        JobState state = manager.getJob(jobId).orElseThrow();
+        while (state.getStatus() == JobStatus.RUNNING || state.getStatus() == JobStatus.PENDING) {
+            if (System.currentTimeMillis() > deadline) {
+                break;
+            }
+            Thread.sleep(20);
+        }
+
+        assertThat(state.getStatus()).isEqualTo(JobStatus.FAILED);
+        assertThat(state.getError()).isEqualTo("boom");
+    }
 }
