@@ -42,6 +42,12 @@ public class TimeWindowIterator implements Iterator<TimeWindow> {
         return tw;
     }
 
+    /**
+     * Returns the total number of windows this iterator will produce.
+     * Must be called before any call to {@link #next()} — the count is computed
+     * from the iterator's current cursor position, so calling this after
+     * iteration has begun returns a smaller, incorrect count with no warning.
+     */
     public int totalWindows() {
         long totalSeconds = Duration.between(cursor, end).getSeconds();
         long windowSeconds = window.getSeconds();

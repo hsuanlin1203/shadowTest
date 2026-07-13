@@ -6,6 +6,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class TimeWindowIteratorTest {
 
@@ -56,5 +57,37 @@ class TimeWindowIteratorTest {
         List<TimeWindow> windows = new ArrayList<>();
         it.forEachRemaining(windows::add);
         assertThat(windows).containsExactly(new TimeWindow(start, end));
+    }
+
+    @Test
+    void throwsIllegalArgumentWhenEndNotAfterStart() {
+        Instant start = Instant.parse("2026-07-13T00:00:00Z");
+        Instant end = Instant.parse("2026-07-13T00:00:00Z");
+        assertThatThrownBy(() -> new TimeWindowIterator(start, end, TEN_MIN))
+            .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void throwsIllegalArgumentWhenEndBeforeStart() {
+        Instant start = Instant.parse("2026-07-13T00:10:00Z");
+        Instant end = Instant.parse("2026-07-13T00:00:00Z");
+        assertThatThrownBy(() -> new TimeWindowIterator(start, end, TEN_MIN))
+            .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void throwsIllegalArgumentWhenWindowIsZero() {
+        Instant start = Instant.parse("2026-07-13T00:00:00Z");
+        Instant end = Instant.parse("2026-07-13T00:10:00Z");
+        assertThatThrownBy(() -> new TimeWindowIterator(start, end, Duration.ZERO))
+            .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void throwsIllegalArgumentWhenWindowIsNegative() {
+        Instant start = Instant.parse("2026-07-13T00:00:00Z");
+        Instant end = Instant.parse("2026-07-13T00:10:00Z");
+        assertThatThrownBy(() -> new TimeWindowIterator(start, end, Duration.ofMinutes(-1)))
+            .isInstanceOf(IllegalArgumentException.class);
     }
 }
