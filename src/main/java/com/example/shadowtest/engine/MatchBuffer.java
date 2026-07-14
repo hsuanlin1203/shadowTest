@@ -13,6 +13,10 @@ import java.util.Optional;
  * Holds full records so a mismatch can be diffed directly, and leftover
  * records can be reported as unmatched with their bodies.
  * Not thread-safe: one instance per job, used from a single job thread.
+ * Assumes traceIds are unique per side: if the same side offers the same
+ * traceId twice before a counterpart arrives, the later record overwrites
+ * the earlier one. This is intentional — source logs are expected to have
+ * at most one record per traceId per side.
  */
 public class MatchBuffer {
 
