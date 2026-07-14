@@ -1,0 +1,29 @@
+spring:
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchRestClientAutoConfiguration
+      - org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchClientAutoConfiguration
+
+elasticsearch:
+  host: localhost
+  port: 9200
+  scheme: http
+  username:
+  password:
+
+anomaly:
+  index-name: shadow-test-anomalies
+
+comparison:
+  tasks:
+    demo-product:
+      product: demo
+      prod-index: prod-responses
+      shadow-index: shadow-responses
+      host: api.example.com
+      host-field: host
+      time-field: "@timestamp"
+      trace-id-field: traceId
+      body-field: responseBody
+      window-minutes: 10
+      page-size: 500
